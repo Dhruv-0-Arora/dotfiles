@@ -1,0 +1,22 @@
+// Zed keymap
+//
+// For information on binding keys, see the Zed
+// documentation: https://zed.dev/docs/key-bindings
+//
+// To see the default key bindings run `zed: Open Default Keymap`
+// from the command palette.
+[
+    {
+        "bindings": {
+            "cmd-r": "workspace::ToggleRightDock",
+            "cmd-shift-left": "pane::SplitLeft",
+            "cmd-shift-right": "pane::SplitRight",
+            "cmd-w": "pane::CloseActiveItem",
+            "cmd-o": "file_finder::Toggle",
+            "cmd-p": "command_palette::Toggle",
+            "cmd-shift-o": "project_panel::Open",
+
+            "cmd-v": "editor::Paste"
+        }
+    }
+]

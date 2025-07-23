@@ -1,0 +1,45 @@
+Synthesis - WARNING - Running resolve dependencies with error of:
+No module named 'requests'
+Synthesis.Dependencies - DEBUG - Running Command -> curl https://bootstrap.pypa.io/get-pip.py -o /Users/arorad1/Library/Application Support/Autodesk/webdeploy/production/18bb3b1bcf969ed58454a634b918acc287ad6414/Autodesk Fusion 360.app/Contents/Frameworks/Python.framework/Versions/Current/bin/get-pip.py
+Synthesis.Dependencies - DEBUG - Command Output:
+
+Synthesis.Dependencies - DEBUG - Running Command -> /Users/arorad1/Library/Application Support/Autodesk/webdeploy/production/18bb3b1bcf969ed58454a634b918acc287ad6414/Autodesk Fusion 360.app/Contents/Frameworks/Python.framework/Versions/Current/bin/python /Users/arorad1/Library/Application Support/Autodesk/webdeploy/production/18bb3b1bcf969ed58454a634b918acc287ad6414/Autodesk Fusion 360.app/Contents/Frameworks/Python.framework/Versions/Current/bin/get-pip.py
+Synthesis.Dependencies - DEBUG - Command Output:
+Collecting pip
+  Downloading pip-24.3.1-py3-none-any.whl.metadata (3.7 kB)
+Downloading pip-24.3.1-py3-none-any.whl (1.8 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.8/1.8 MB 13.0 MB/s eta 0:00:00
+Installing collected packages: pip
+Successfully installed pip-24.3.1
+
+Synthesis.Dependencies - DEBUG - Running Command -> /Users/arorad1/Library/Application Support/Autodesk/webdeploy/production/18bb3b1bcf969ed58454a634b918acc287ad6414/Autodesk Fusion 360.app/Contents/Frameworks/Python.framework/Versions/Current/bin/python -m pip freeze
+Synthesis.Dependencies - DEBUG - Command Output:
+
+Synthesis.Dependencies - DEBUG - Running Command -> /Users/arorad1/Library/Application Support/Autodesk/webdeploy/production/18bb3b1bcf969ed58454a634b918acc287ad6414/Autodesk Fusion 360.app/Contents/Frameworks/Python.framework/Versions/Current/bin/python -m pip install protobuf==5.27.2
+Synthesis.Dependencies - DEBUG - Command Output:
+Collecting protobuf==5.27.2
+  Using cached protobuf-5.27.2-cp38-abi3-macosx_10_9_universal2.whl.metadata (592 bytes)
+Using cached protobuf-5.27.2-cp38-abi3-macosx_10_9_universal2.whl (412 kB)
+Installing collected packages: protobuf
+Successfully installed protobuf-5.27.2
+
+Synthesis.Dependencies - DEBUG - Running Command -> /Users/arorad1/Library/Application Support/Autodesk/webdeploy/production/18bb3b1bcf969ed58454a634b918acc287ad6414/Autodesk Fusion 360.app/Contents/Frameworks/Python.framework/Versions/Current/bin/python -m pip install requests==2.32.3
+Synthesis.Dependencies - DEBUG - Command Output:
+Collecting requests==2.32.3
+  Using cached requests-2.32.3-py3-none-any.whl.metadata (4.6 kB)
+Collecting charset-normalizer<4,>=2 (from requests==2.32.3)
+  Downloading charset_normalizer-3.4.1-cp312-cp312-macosx_10_13_universal2.whl.metadata (35 kB)
+Collecting idna<4,>=2.5 (from requests==2.32.3)
+  Downloading idna-3.10-py3-none-any.whl.metadata (10 kB)
+Collecting urllib3<3,>=1.21.1 (from requests==2.32.3)
+  Downloading urllib3-2.3.0-py3-none-any.whl.metadata (6.5 kB)
+Collecting certifi>=2017.4.17 (from requests==2.32.3)
+  Downloading certifi-2024.12.14-py3-none-any.whl.metadata (2.3 kB)
+Using cached requests-2.32.3-py3-none-any.whl (64 kB)
+Downloading certifi-2024.12.14-py3-none-any.whl (164 kB)
+Downloading charset_normalizer-3.4.1-cp312-cp312-macosx_10_13_universal2.whl (196 kB)
+Downloading idna-3.10-py3-none-any.whl (70 kB)
+Downloading urllib3-2.3.0-py3-none-any.whl (128 kB)
+Installing collected packages: urllib3, idna, charset-normalizer, certifi, requests
+Successfully installed certifi-2024.12.14 charset-normalizer-3.4.1 idna-3.10 requests-2.32.3 urllib3-2.3.0
+
