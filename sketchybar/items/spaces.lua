@@ -4,118 +4,88 @@ local settings = require("settings")
 local app_icons = require("helpers.app_icons")
 
 local spaces = {}
-local letters = { "b", "c", "m", "g", "v", "q", "p", "n", "s", "z", "t", "r" }
 
-for i = 1, 12, 1 do
-	local space = sbar.add("space", "space." .. i, {
-		space = i,
-		icon = {
-			drawing = false,
-			font = { family = settings.font.numbers },
-			string = "",
-			padding_left = 6,
-			padding_right = 2,
-			color = colors.white,
-			highlight_color = colors.red,
-		},
-		label = {
-			padding_right = 8,
-			color = colors.grey,
-			highlight_color = colors.white,
-			font = "sketchybar-app-font:Regular:16.0",
-			y_offset = -1,
-		},
-		padding_right = 1,
-		padding_left = 1,
-		background = {
-			color = colors.bg1,
-			border_width = 1,
-			height = 26,
-			border_color = colors.black,
-		},
-		popup = { background = { border_width = 5, border_color = colors.black } },
-	})
+local function update_aerospace_spaces()
+  -- Get the currently focused workspace name from Aerospace
+  local active_ws_cmd = io.popen("aerospace list-workspaces --focused")
+  local active_ws = active_ws_cmd:read("*a"):gsub("^%s*(.-)%s*$", "%1") -- Read output and trim whitespace
+  active_ws_cmd:close()
 
-	spaces[i] = space
+  -- Loop through all the space items we created
+  for sid, space_group in pairs(spaces) do
+    local is_selected = (sid == active_ws)
 
-	-- Single item bracket for space items to achieve double border on highlight
-	local space_bracket = sbar.add("bracket", { space.name }, {
-		background = {
-			color = colors.transparent,
-			border_color = colors.bg2,
-			height = 28,
-			border_width = 2,
-		},
-	})
-
-	-- Padding space
-	sbar.add("space", "space.padding." .. i, {
-		space = i,
-		script = "",
-		width = settings.group_paddings,
-	})
-
-	local space_popup = sbar.add("item", {
-		position = "popup." .. space.name,
-		padding_left = 2,
-		padding_right = 0,
-		background = {
-			drawing = true,
-			image = {
-				corner_radius = 9,
-				scale = 0.2,
-			},
-		},
-	})
-
-	space:subscribe("space_change", function(env)
-		local selected = env.SELECTED == "true"
-		local color = selected and colors.grey or colors.bg2
-		space:set({
-			icon = { highlight = selected },
-			label = { highlight = selected },
-			background = { border_color = selected and colors.black or colors.bg2 },
-		})
-		space_bracket:set({
-			background = { border_color = selected and colors.grey or colors.bg2 },
-		})
-	end)
-
-	space:subscribe("mouse.clicked", function(env)
-		if env.BUTTON == "other" then
-			space_popup:set({ background = { image = "space." .. env.SID } })
-			space:set({ popup = { drawing = "toggle" } })
-		else
-			sbar.exec("aerospace workspace " .. env.SID)
-		end
-	end)
-
-	space:subscribe("mouse.exited", function(_)
-		space:set({ popup = { drawing = false } })
-	end)
+    -- Set properties based on whether the space is selected
+    space_group.item:set({
+      background = {
+        border_color = is_selected and colors.black or colors.bg2,
+      },
+      label = {
+        highlight = is_selected,
+      },
+    })
+    space_group.bracket:set({
+      background = {
+        border_color = is_selected and colors.grey or colors.bg2,
+      },
+    })
+  end
 end
 
-local space_window_observer = sbar.add("item", {
-	drawing = false,
-	updates = true,
-})
+-- Use io.popen to execute the aerospace command and loop over its output.
+-- 'lines()' iterates over each line, where each line is a workspace name.
+for sid in io.popen("aerospace list-workspaces --all"):lines() do
+  -- Trim any whitespace from the workspace name
+  sid = sid:gsub("^%s*(.-)%s*$", "%1")
 
-space_window_observer:subscribe("space_windows_change", function(env)
-	local icon_line = ""
-	local no_app = true
-	for app, count in pairs(env.INFO.apps) do
-		no_app = false
-		local lookup = app_icons[app]
-		local icon = ((lookup == nil) and app_icons["Default"] or lookup)
-		icon_line = icon_line .. icon
-	end
+  -- Use 'item' instead of 'space' for custom window manager integration
+  local space = sbar.add("item", "space." .. sid, {
+    -- The label is now the workspace name (sid) from Aerospace
+    label = {
+      string = sid,
+      padding_right = 8,
+      color = colors.grey,
+      highlight_color = colors.white,
+      font = { family = settings.font.text },
+      y_offset = -1,
+    },
+    padding_right = 1,
+    padding_left = 1,
+    background = {
+      color = colors.bg2,
+      border_width = 1,
+      height = 26,
+      border_color = colors.black,
+    },
+    -- When clicked, switch to this workspace
+    click_script = "aerospace workspace '" .. sid .. "'",
+  })
 
-	if no_app then
-		icon_line = env.INFO.space .. " —"
-	else
-		icon_line = env.INFO.space .. " " .. icon_line
-	end
-	sbar.animate("tanh", 10, function()
-		spaces[env.INFO.space]:set({ label = icon_line })
-	end)
-end)
+  -- Single item bracket for space items to achieve double border on highlight
+  local space_bracket = sbar.add("bracket", { space.name }, {
+    background = {
+      color = colors.transparent,
+      border_color = colors.bg2,
+      height = 28,
+      border_width = 2,
+    },
+  })
+
+  -- Padding space
+  sbar.add("item", "space.padding." .. sid, {
+    width = settings.group_paddings,
+  })
+
+  -- Store references to the item and its bracket for easy updating
+  spaces[sid] = {
+    item = space,
+    bracket = space_bracket,
+  }
+end
+
+-- Add a single item to listen for Aerospace workspace changes
+local aerospace_observer = sbar.add("item", "aerospace_observer", { drawing = false })
+aerospace_observer:subscribe("aerospace_workspace_change", update_aerospace_spaces)
+
+-- Run the update function once at the start to set the initial state
+update_aerospace_spaces()
