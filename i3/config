@@ -190,13 +190,19 @@ mode "resize" {
 
 bindsym Mod1+r mode "resize"
 
+default_border pixel 6
+default_floating_border pixel 6
+
+gaps inner 8
+gaps outer 3
+gaps top 35
 
 
-set $green     #a6e3a1
+set $green     #2E6F40
 set $white     #ffffff
 set $black     #000000
 
-client.focused $black $green $black $black $black
+client.focused $green $green $black $green $green
 
 
 #######################################################################
