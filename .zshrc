@@ -33,4 +33,5 @@ alias flash="idf.py flash monitor"
 alias sai="cd ~/Documents/sai-bots/"
 
 export PATH="/Applications/Alacritty.app/Contents/MacOS:$PATH"
-export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
+# export PATH="/opt/homebrew/opt/openjdk/bin:$PATH" # java version 25
+export PATH="/usr/libexec/java_home -v 21.0.9:$PATH"
