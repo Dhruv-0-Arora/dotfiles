@@ -16,11 +16,12 @@ alias gl="git log --oneline --graph --decorate --all"
 alias gbl="git blame -L"
 
 alias e="nvim"
-alias l="ls -la"
+alias l="eza --icons --git --group-directories-first"
 alias c="clear"
 alias zshrc="e ~/.zshrc"
+alias winter="cd /Volumes/wintermute/docs/ && l"
 
-alias ..="cd .."
+alias ..="cd .. && l"
 alias ...="cd ../.."
 alias ....="cd ../../.."
 
@@ -31,6 +32,7 @@ alias wheel="cd ~/Documents/226_steeringwheel/"
 alias espset="cd ~/esp/esp-idf/ && . ./export.sh && wheel"
 alias flash="idf.py flash monitor"
 alias sai="cd ~/Documents/sai-bots/"
+alias rlocl="python3 -m uvicorn server:app --host 0.0.0.0 --port 8000"
 
 export PATH="/Applications/Alacritty.app/Contents/MacOS:$PATH"
 # export PATH="/opt/homebrew/opt/openjdk/bin:$PATH" # java version 25
