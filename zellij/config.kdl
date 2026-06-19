@@ -310,7 +310,7 @@ themes {
     }
 }
 
-theme "forest_green"
+theme "forest_green" // setting the theme itself
  
 // Use a simplified UI without special fonts (arrow glyphs)
 // Options:

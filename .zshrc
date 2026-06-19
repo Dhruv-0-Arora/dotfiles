@@ -49,6 +49,11 @@ export PATH="/Applications/Alacritty.app/Contents/MacOS:$PATH"
 export PATH="/usr/libexec/java_home -v 21.0.9:$PATH"
 export GPG_TTY=$(tty)
 
+if [ -z "$ZELLIJ" ]; then
+    # Attach to 'default' or create it; then close the shell wrapper upon exit
+    exec zellij attach -c default
+fi
+
 
 # Kiro CLI post block. Keep at the bottom of this file.
 [[ -f "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh"
