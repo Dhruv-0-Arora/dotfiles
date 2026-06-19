@@ -3,3 +3,4 @@ normal = { family = "FiraCode Nerd Font Mono", style = "Regular" }
 
 [window]
 decorations = "none"
+option_as_alt = "Both"
