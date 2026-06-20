@@ -2,5 +2,6 @@
 normal = { family = "FiraCode Nerd Font Mono", style = "Regular" }
 
 [window]
+opacity = 0.65
 decorations = "none"
 option_as_alt = "Both"
