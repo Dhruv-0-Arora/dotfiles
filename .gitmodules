@@ -1,3 +1,6 @@
 [submodule "nvim"]
 	path = nvim
 	url = https://github.com/Dhruv-0-Arora/nvim
+[submodule "code-quality-skill"]
+    path = code-quality-skill
+    url = https://github.com/Dhruv-0-Arora/code-quality-skill.git

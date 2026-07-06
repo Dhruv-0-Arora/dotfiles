@@ -108,6 +108,8 @@ if ! have gws; then
   cargo install --git "$GWS_REPO" || warn "gws install failed - run 'cargo install --git $GWS_REPO' manually"
 fi
 
+# TODO: work on moving files to .agents/ and making a simlink from it and again for .claude && do gh-axi and lavish-axi
+
 # --- 6. Symlinks -------------------------------------------------------
 # .zshrc lives in the repo; $HOME/.zshrc points at it.
 link "$DOTFILES/.zshrc" "$HOME/.zshrc"

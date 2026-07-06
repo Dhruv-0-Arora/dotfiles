@@ -71,8 +71,8 @@ alias zshrc="e ~/.zshrc"
 alias winter="cd /Volumes/wintermute/docs/ && l"
 
 alias ..="cd .. && l"
-alias ...="cd ../.."
-alias ....="cd ../../.."
+alias ...="cd ../.. && l"
+alias ....="cd ../../.. && l"
 
 # home server
 alias conn_server="ssh darora1@100.82.147.100"
