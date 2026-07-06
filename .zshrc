@@ -1,12 +1,6 @@
-
-# Kiro CLI pre block. Keep at the top of this file.
-[[ -f "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.pre.zsh" ]] && builtin source "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.pre.zsh"
-
-# bun completions
-[ -s "/Users/dhruvarora/.bun/_bun" ] && source "/Users/dhruvarora/.bun/_bun"
-
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
+# git completions
+fpath=(/opt/homebrew/share/zsh/site-functions $fpath)
+autoload -Uz compinit && compinit
 
 alias gs="git status"
 alias ga="git add ."
@@ -51,7 +45,7 @@ gwo() {
   local dir="$1" name="${2:-${1:t}}"
   [[ -z "$dir" ]] && { echo "usage: gwo <path> [tab-name]" >&2; return 1; }
   if [[ -n "$ZELLIJ" ]]; then
-    zellij action new-tab --cwd "$dir" --name "$name"
+    zellij action new-tab -n "$name" -c "$dir" -- zsh
   else
     cd "$dir" && l
   fi
@@ -89,6 +83,7 @@ alias config="cd ~/.config/"
 alias vault="cd '/Users/dhruvarora/Library/Mobile Documents/iCloud~md~obsidian/Documents/Brain'"
 alias wheel="cd ~/Documents/226_steeringwheel/"
 alias sai="cd ~/Documents/sai-bots/"
+alias fis="cd ~/Documents/synthesis/fission/"
 
 # misc
 alias espset="cd ~/esp/esp-idf/ && . ./export.sh && wheel"
@@ -109,11 +104,6 @@ parse_git_branch() {
 }
 setopt PROMPT_SUBST
 export PROMPT='%F{cyan}%~ %F{green}[$(parse_git_branch)]%f $ '
-
-
-# Kiro CLI post block. Keep at the bottom of this file.
-[[ -f "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh"
-eval "$(zellij setup --generate-auto-start zsh)"
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/dhruvarora/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/dhruvarora/google-cloud-sdk/path.zsh.inc'; fi
