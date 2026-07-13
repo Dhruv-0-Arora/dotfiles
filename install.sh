@@ -25,11 +25,14 @@ warn() { printf '\033[1;33mwarn:\033[0m %s\n' "$*" >&2; }
 have() { command -v "$1" >/dev/null 2>&1; }
 
 # link SRC -> DEST, backing up whatever is already at DEST (unless it is
-# already the correct symlink).
+# already a symlink resolving to the same place).
 link() {
   local src="$1" dest="$2"
-  if [ -L "$dest" ] && [ "$(readlink "$dest")" = "$src" ]; then
-    return 0                                   # already correct
+  if [ -L "$dest" ]; then
+    if [ "$(readlink "$dest")" = "$src" ] || \
+       [ "$(readlink -f "$dest" 2>/dev/null)" = "$(readlink -f "$src" 2>/dev/null)" ]; then
+      return 0                                 # already correct
+    fi
   fi
   if [ -e "$dest" ] || [ -L "$dest" ]; then
     local bak="${dest}.bak.$(date +%Y%m%d%H%M%S)"
@@ -108,25 +111,23 @@ if ! have gws; then
   cargo install --git "$GWS_REPO" || warn "gws install failed - run 'cargo install --git $GWS_REPO' manually"
 fi
 
-# TODO: work on moving files to .agents/ and making a simlink from it and again for .claude && do gh-axi and lavish-axi
-
 # --- 6. Symlinks -------------------------------------------------------
 # .zshrc lives in the repo; $HOME/.zshrc points at it.
 link "$DOTFILES/.zshrc" "$HOME/.zshrc"
 
-# Claude Code: memory + skills (and the global instruction files) live in the
-# repo so they are version-controlled and portable across machines.
-link "$DOTFILES/claude/skills" "$HOME/.claude/skills"
-link "$DOTFILES/claude/AGENTS.md"   "$HOME/AGENTS.md"
-link "$DOTFILES/claude/OPINIONS.md" "$HOME/OPINIONS.md"
-link "$DOTFILES/claude/VOICE.md"    "$HOME/VOICE.md"
-# ~/.claude/CLAUDE.md is Claude's global instruction file -> point at AGENTS.md
-link "$HOME/AGENTS.md" "$HOME/.claude/CLAUDE.md"
-# Claude's persistent memory store for the ~/.config project.
-CLAUDE_MEM="$HOME/.claude/projects/-Users-dhruvarora--config/memory"
-link "$DOTFILES/claude/memory" "$CLAUDE_MEM"
+# --- 7. Agentic setup (~/.agents hub, skills, instruction files) --------
+# Separate script so it can be re-run on its own to sync agent config:
+#   ~/.config/install-agents.sh
+log "Running agent setup..."
+AGENTS_SKIP_PULL=1 "$DOTFILES/install-agents.sh"
 
-# --- 7. Done -----------------------------------------------------------
+# --- 7b. Claude Code config (theme, statusline, settings) --------------
+# Copied (not symlinked) because Claude Code rewrites settings.json in place.
+# Re-sync back to the repo later with ~/.config/claude/update.sh.
+log "Applying Claude Code config..."
+"$DOTFILES/claude/apply.sh"
+
+# --- 8. Done -----------------------------------------------------------
 log "Setup complete."
 cat <<'EOF'
 

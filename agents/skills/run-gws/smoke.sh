@@ -3,7 +3,7 @@
 # Read-only probes plus --dry-run validation of every write helper.
 # Never sends email, never writes to Sheets/Docs/Drive/Calendar.
 #
-# Usage: bash ~/.claude/skills/run-gws/smoke.sh
+# Usage: bash ~/.agents/skills/run-gws/smoke.sh
 # Exit 0 = core surfaces healthy. Gmail/Chat are reported but do not
 # fail the suite (known account limitations, see SKILL.md Gotchas).
 

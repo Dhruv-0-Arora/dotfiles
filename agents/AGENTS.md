@@ -25,3 +25,7 @@ When you are working on something that would benefit from being informed by Dhru
 ## Voice Profile
 
 When you are talking/posting on behalf of Dhruv using his identity, read ~/VOICE.md to see how Dhruv talks.
+
+# graphify
+- **graphify** (`~/.agents/skills/graphify/SKILL.md`) - any input to knowledge graph. Trigger: `/graphify`
+When the user types `/graphify`, use the installed graphify skill or instructions before doing anything else.

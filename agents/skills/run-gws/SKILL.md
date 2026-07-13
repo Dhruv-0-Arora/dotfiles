@@ -13,7 +13,7 @@ There is nothing to build or install.
 ## Smoke test (agent path - run this first)
 
 ```bash
-bash ~/.claude/skills/run-gws/smoke.sh
+bash ~/.agents/skills/run-gws/smoke.sh
 ```
 
 Read-only probes plus `--dry-run` validation of every write helper.
