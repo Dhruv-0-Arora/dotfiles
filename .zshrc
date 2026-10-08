@@ -110,3 +110,10 @@ if [ -f '/Users/dhruvarora/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/dhru
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/dhruvarora/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/dhruvarora/google-cloud-sdk/completion.zsh.inc'; fi
+
+# Greet new shells with the mountain fetch (config and art in ~/dotfiles/fastfetch).
+# Only for interactive shells writing to a terminal; silently skipped on machines
+# without fastfetch (e.g. the Mac) so the shared .zshrc stays portable.
+if [[ -o interactive && -t 1 ]] && command -v fastfetch >/dev/null; then
+    fastfetch --config "$HOME/dotfiles/fastfetch/config.jsonc"
+fi
