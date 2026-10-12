@@ -67,6 +67,18 @@ l() {
 }
 alias c="clear"
 alias cc="claude"
+
+# open <file>: like macOS open. A PDF inside zellij shows in a pane beside this
+# one, through the same viewer vimtex uses; anything else goes to the desktop.
+open() {
+    if [[ -n "$ZELLIJ" && "$1" == *.pdf ]]; then
+        "$HOME/.config/nvim/bin/zellij-pdf-view" "${1:a}"
+    elif command -v xdg-open >/dev/null; then
+        xdg-open "$@"
+    else
+        command open "$@"
+    fi
+}
 alias zshrc="e ~/.zshrc"
 alias winter="cd /Volumes/wintermute/docs/ && l"
 
