@@ -59,7 +59,7 @@ export EZA_COLORS="di=38;2;34;139;34"
 # recency), everywhere else plain eza. Extend the guard with more paths as needed.
 unalias l 2>/dev/null  # drop any pre-existing `l` alias so the function defines cleanly
 l() {
-  if [[ "$PWD" == "$HOME/Documents" ]]; then
+  if [[ "$PWD" == "$HOME/Documents" ]] && command -v dirtint >/dev/null; then
     command dirtint "$@"
   else
     command eza --icons --git --group-directories-first "$@"
@@ -67,6 +67,8 @@ l() {
 }
 alias c="clear"
 alias cc="claude"
+# gcal-tui is the calendar TUI; gcal-axi is the scriptable CLI. `gcal` opens the TUI.
+alias gcal="gcal-tui"
 
 # open <file>: like macOS open. A PDF inside zellij shows in a pane beside this
 # one, through the same viewer vimtex uses; anything else goes to the desktop.
@@ -92,7 +94,6 @@ alias conn_server="ssh darora1@100.82.147.100"
 # directories
 alias docs="cd ~/Documents/ && l"
 alias config="cd ~/.config/"
-alias vault="cd '/Users/dhruvarora/Library/Mobile Documents/iCloud~md~obsidian/Documents/Brain'"
 alias wheel="cd ~/Documents/226_steeringwheel/"
 alias sai="cd ~/Documents/sai-bots/"
 alias fis="cd ~/Documents/synthesis/fission/"
@@ -102,13 +103,19 @@ alias espset="cd ~/esp/esp-idf/ && . ./export.sh && wheel"
 alias flash="idf.py flash monitor"
 alias rlocl="python3 -m uvicorn server:app --host 0.0.0.0 --port 8000"
 
-export PATH="/Applications/Alacritty.app/Contents/MacOS:$PATH"
-# export PATH="/opt/homebrew/opt/openjdk/bin:$PATH" # java version 25
-export PATH="/usr/libexec/java_home -v 21.0.9:$PATH"
+# macOS-only: Alacritty keeps its binary inside the .app bundle, and java_home is
+# a Darwin tool. On linux both of these just put dead entries on PATH.
+if [[ "$OSTYPE" == darwin* ]]; then
+    export PATH="/Applications/Alacritty.app/Contents/MacOS:$PATH"
+    # export PATH="/opt/homebrew/opt/openjdk/bin:$PATH" # java version 25
+    # java_home prints the JDK root, so it needs to be run, not pasted onto PATH.
+    export PATH="$(/usr/libexec/java_home -v 21.0.9)/bin:$PATH"
+fi
 export GPG_TTY=$(tty)
 
-if [ -z "$ZELLIJ" ]; then
-    # Attach to 'default' or create it; then close the shell wrapper upon exit
+if [ -z "$ZELLIJ" ] && [ -z "$SSH_CONNECTION" ]; then
+    # Attach to 'default' or create it; then close the shell wrapper upon exit.
+    # Skipped over SSH: remote shells stay plain instead of grabbing the shared session.
     exec zellij attach -c default
 fi
 parse_git_branch() {
@@ -129,3 +136,15 @@ if [ -f '/Users/dhruvarora/google-cloud-sdk/completion.zsh.inc' ]; then . '/User
 if [[ -o interactive && -t 1 ]] && command -v fastfetch >/dev/null; then
     fastfetch --config "$HOME/dotfiles/fastfetch/config.jsonc"
 fi
+
+# --- vault: coursework + astute + TODO.typ, synced with ssh-box ------------
+alias vault="cd ~/Documents/vault"
+# Sync on both sides of the editor so the file opens fresh and edits leave
+# right away instead of waiting for the 5-minute timer. A failed sync (offline,
+# conflict) must never keep the editor from opening.
+todo() {
+  vault-sync || true
+  nvim +'lua require("typst_preview").start(0)' ~/Documents/vault/TODO.typ
+  vault-sync || true
+}
+alias todosync="vault-sync"
