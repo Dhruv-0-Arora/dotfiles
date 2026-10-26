@@ -44,17 +44,17 @@ overrides = [
 ]
 
 palette = {
-    "s": "#F4F6FB",  # summit snow
-    "i": "#9FD3F0",  # glacier ice
-    "h": "#B9C6D8",  # shaded snowfields
-    "r": "#8B8F9A",  # grey rock
-    "b": "#7A6250",  # brown rock
-    "f": "#3E7C3A",  # forest
-    "d": "#24502A",  # tree line
+    "s": "#F7FAFF",  # summit snow
+    "i": "#8CCBF2",  # glacier ice
+    "h": "#C6DDF4",  # shaded snowfields
+    "r": "#7D9CC0",  # blue-shadowed rock
+    "b": "#5577A0",  # deep slate at the base
+    "f": "#E3EEFA",  # snowy foothills between the pines
+    "d": "#3E7C5A",  # pines
 }
 
 # Texture glyph per band: lighter at the top, denser lower down.
-fill = {"s": "*", "i": ":", "h": "+", "r": "#", "b": "%", "f": "&", "d": "^"}
+fill = {"s": "*", "i": ":", "h": "+", "r": "=", "b": "#", "f": ".", "d": "^"}
 
 rng = random.Random(7)
 
@@ -69,11 +69,10 @@ def contour(nominal, lo, hi, run=0.65):
 
 
 bands = [
-    ("s", contour(6, 0, 1)),
-    ("h", contour(9, -1, 1)),
-    ("r", contour(11, -1, 1)),
-    ("b", contour(13, -2, 1)),
-    ("f", None),
+    ("s", contour(8, 0, 1)),
+    ("h", contour(10, -1, 1)),
+    ("r", contour(12, -1, 0)),
+    ("b", None),
 ]
 
 
@@ -83,7 +82,7 @@ def band_at(y, x):
             return letter
 
 
-tree_line = "dfdddfddddfdddfddddfddfdddddfdddfddddfddfdddfddddfddd"
+tree_line = "ffdfffffdffffffdfffffffdffffdfffffffdffffffdfffffdfff"
 assert len(tree_line) == W
 
 grid = [[" "] * W for _ in range(H)]
@@ -109,7 +108,7 @@ def glyph(y, x):
     if c == " ":
         return " "
     if y == H - 1:
-        return "^" if c == "d" else fill["f"]
+        return fill[c]
     if cell(y, x - 1) == " ":
         return "/"
     if cell(y, x + 1) == " ":
